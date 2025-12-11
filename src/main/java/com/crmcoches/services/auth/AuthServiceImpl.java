@@ -5,6 +5,7 @@ import com.crmcoches.dto.UserDto;
 import com.crmcoches.entity.User;
 import com.crmcoches.enums.UserRole;
 import com.crmcoches.repository.UserRepository;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder; // <--- Import correcto
 import org.springframework.stereotype.Service;
@@ -15,6 +16,19 @@ public class AuthServiceImpl implements AuthService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder; // <--- Inyectamos el bean de configuración
+    @PostConstruct
+    public void createAdminAccount(){
+        User adminAccount = userRepository.findByUserRole(UserRole.ADMIN);
+        if (adminAccount == null){
+            User newAdminAccount = new User();
+            newAdminAccount.setName("admin");
+            newAdminAccount.setEmail("admin@crm.com");
+            newAdminAccount.setPassword(passwordEncoder.encode("admin"));
+            newAdminAccount.setUserRole(UserRole.ADMIN);
+            userRepository.save(newAdminAccount);
+            System.out.println("Cuenta de Administrador creada exitosamente");
+        }
+    }
 
     @Override
     public UserDto createCustomer(SignupRequest signupRequest) {
