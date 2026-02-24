@@ -28,7 +28,7 @@ public class Car {
 
     private Long price;
 
-    private Date year;
+    private Integer year;
 
 
     @Column(columnDefinition = "longblob")

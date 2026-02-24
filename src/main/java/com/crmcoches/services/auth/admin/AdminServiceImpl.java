@@ -9,6 +9,9 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.io.FileWriter;
+import java.io.PrintWriter;
+import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
@@ -18,7 +21,7 @@ public class AdminServiceImpl implements AdminService{
 
     @Override
     public boolean postCar(CarDto carDto) throws IOException {
-        try{
+        try {
             Car car = new Car();
             car.setName(carDto.getName());
             car.setBrand(carDto.getBrand());
@@ -29,14 +32,22 @@ public class AdminServiceImpl implements AdminService{
             car.setDescription(carDto.getDescription());
             car.setTransmission(carDto.getTransmission());
             car.setImage(carDto.getImage().getBytes());
+
+            // 1. Guardamos en la Base de Datos (RA 3)
             carRepository.save(car);
+
+            // 2. NUEVO: Guardamos un log en un fichero de texto (Cumplimos el RA 1)
+            try (FileWriter fw = new FileWriter("registro_coches.txt", true);
+                 PrintWriter pw = new PrintWriter(fw)) {
+                pw.println(LocalDateTime.now() + " - NUEVO COCHE CREADO: " + car.getBrand() + " " + car.getName());
+            } catch (Exception ex) {
+                System.err.println("Error al escribir el fichero de log: " + ex.getMessage());
+            }
+
             return true;
-        }catch (Exception e){
+        } catch (Exception e) {
             return false;
         }
-
-
-
     }
 
     @Override
