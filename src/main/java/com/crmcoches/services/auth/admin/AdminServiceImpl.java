@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.io.FileWriter;
 import java.io.PrintWriter;
@@ -53,5 +54,16 @@ public class AdminServiceImpl implements AdminService{
     @Override
     public List<CarDto> getAllCars() {
         return carRepository.findAll().stream().map(Car::getCarDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public void deleteCar(long id) {
+        carRepository.deleteById(id);
+    }
+
+    @Override
+    public CarDto getCarById(long id) {
+        Optional<Car> optionalCar = carRepository.findById(id);
+        return optionalCar.map(Car::getCarDto).orElse(null);
     }
 }
