@@ -24,6 +24,7 @@ public class Car {
 
     private String transmission;
 
+    @Column(length = 2000)
     private String description;
 
     private Long price;

@@ -14,4 +14,6 @@ public interface AdminService {
     void deleteCar(long id);
 
     CarDto getCarById(long id);
+
+    boolean updateCar(long carId, CarDto carDto) throws IOException;
 }
