@@ -1,13 +1,16 @@
-# Paso 1: Compilar con Maven y Java 21
-FROM maven:3.9.6-eclipse-temurin-21 AS build
+# Etapa 1: Construcción (Build)
+FROM eclipse-temurin:21-jdk-jammy AS build
+# Instalamos Maven manualmente para asegurar compatibilidad
+RUN apt-get update && apt-get install -y maven
 COPY . .
-RUN mvn clean package -DskipTests
+# Damos permisos de ejecución al wrapper y construimos
+RUN chmod +x mvnw && ./mvnw clean package -DskipTests
 
-# Paso 2: Ejecutar con el JRE de Java 21
+# Etapa 2: Ejecución (Runtime)
 FROM eclipse-temurin:21-jre-jammy
-# Copiamos el archivo .jar generado en el paso anterior
+WORKDIR /app
+# Copiamos el archivo generado (el asterisco ayuda si el nombre varía)
 COPY --from=build /target/*.jar app.jar
-# Exponemos el puerto 8080 (el que usa Spring Boot por defecto)
 EXPOSE 8080
-# Comando para arrancar la app
-ENTRYPOINT ["java","-jar","/app.jar"]
+# Comando de arranque
+ENTRYPOINT ["java", "-jar", "app.jar"]
