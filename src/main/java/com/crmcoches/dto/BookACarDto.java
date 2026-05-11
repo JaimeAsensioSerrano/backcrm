@@ -2,6 +2,7 @@ package com.crmcoches.dto;
 
 
 import com.crmcoches.enums.BookCarsStatus;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import java.util.Date;
@@ -11,8 +12,10 @@ public class BookACarDto {
 
     private Long id;
 
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date fromDate;
 
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date toDate;
 
     private Long days;
@@ -24,4 +27,11 @@ public class BookACarDto {
     private Long carId;
 
     private Long userId;
+
+    private String username;
+
+    private String email;
+
+    private String carName;
+
 }

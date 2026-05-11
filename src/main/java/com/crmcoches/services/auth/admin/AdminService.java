@@ -1,6 +1,9 @@
 package com.crmcoches.services.auth.admin;
 
+import com.crmcoches.dto.BookACarDto;
 import com.crmcoches.dto.CarDto;
+import com.crmcoches.dto.CarDtoListDto;
+import com.crmcoches.dto.SearchCarDto;
 
 import java.io.IOException;
 import java.util.List;
@@ -16,4 +19,10 @@ public interface AdminService {
     CarDto getCarById(long id);
 
     boolean updateCar(long carId, CarDto carDto) throws IOException;
+
+    List<BookACarDto> getBookings();
+
+    boolean changeBookingStatus(Long bookingId, String status);
+
+    CarDtoListDto searchCar(SearchCarDto searchCarDto);
 }
